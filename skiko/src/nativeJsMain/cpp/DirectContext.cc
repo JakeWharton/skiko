@@ -1,5 +1,6 @@
 #include "GrDirectContext.h"
 #include "include/gpu/gl/GrGLInterface.h"
+#include "include/gpu/gl/egl/GrGLMakeEGLInterface.h"
 #include "common.h"
 
 #ifdef SK_METAL
@@ -19,6 +20,11 @@ SKIKO_EXPORT KNativePointer org_jetbrains_skia_DirectContext__1nMakeGLWithInterf
   (KNativePointer ptr) {
     sk_sp<GrGLInterface> iface = sk_ref_sp(reinterpret_cast<GrGLInterface*>(ptr));
     return reinterpret_cast<KNativePointer>(GrDirectContext::MakeGL(iface).release());
+}
+
+SKIKO_EXPORT KNativePointer org_jetbrains_skia_DirectContext__1nMakeEGL
+  () {
+    return reinterpret_cast<KNativePointer>(GrDirectContext::MakeGL(GrGLMakeEGLInterface()).release());
 }
 
 SKIKO_EXPORT KNativePointer org_jetbrains_skia_DirectContext__1nMakeMetal

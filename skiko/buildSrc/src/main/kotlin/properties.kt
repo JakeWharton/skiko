@@ -37,7 +37,7 @@ fun compilerForTarget(os: OS, arch: Arch): String =
     when (os) {
         OS.Linux -> when (arch) {
             Arch.X64 -> "g++"
-            Arch.Arm64 -> "clang++"
+            Arch.Arm64 -> "skiko-clang"
             Arch.Wasm -> "Unexpected combination: $os & $arch"
         }
         OS.Android -> "clang++"

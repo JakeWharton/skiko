@@ -195,7 +195,7 @@ fun SkikoProjectContext.configureNativeTarget(os: OS, arch: Arch, target: Kotlin
             mutableListOfLinkerOptions(iosFrameworks)
         }
         OS.Linux -> mutableListOfLinkerOptions(
-            "-L/usr/lib/x86_64-linux-gnu",
+            "-L/usr/lib/${if (arch == Arch.Arm64) "aarch64" else "x86_64"}-linux-gnu",
             "-lfontconfig",
             "-lGL",
             // TODO: an ugly hack, Linux linker searches only unresolved symbols.

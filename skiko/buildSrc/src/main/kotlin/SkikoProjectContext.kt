@@ -34,14 +34,15 @@ fun SkikoProjectContext.registerOrGetSkiaDirProvider(
 ): Provider<File> = with(this.project) {
     val taskNameSuffix = joinToTitleCamelCase(buildType.id, os.idWithSuffix(isIosSim = isIosSim), arch.id)
     val skiaRelease = skiko.skiaReleaseFor(os, arch, buildType, isIosSim)
-    val downloadSkia = tasks.registerOrGetTask<Download>("downloadSkia$taskNameSuffix") {
+    val downloadSkia = provider { rootProject.file("Skia-m116-47d3027-1-linux-Release-arm64.zip") }
+        /*tasks.registerOrGetTask<Download>("downloadSkia$taskNameSuffix") {
         onlyIf { !dest.exists() }
         onlyIfModified(true)
         val skiaUrl = "https://github.com/JetBrains/skia-pack/releases/download/$skiaRelease.zip"
         inputs.property("skia.url", skiaUrl)
         src(skiaUrl)
         dest(skiko.dependenciesDir.resolve("skia/$skiaRelease.zip"))
-    }.map { it.dest.absoluteFile }
+    }.map { it.dest.absoluteFile }*/
 
     return if (skiko.skiaDir != null) {
         tasks.registerOrGetTask<DefaultTask>("skiaDir$taskNameSuffix") {
@@ -53,7 +54,7 @@ fun SkikoProjectContext.registerOrGetSkiaDirProvider(
         }.map { skiko.skiaDir!!.absoluteFile }
     } else {
         tasks.registerOrGetTask<Copy>("unzipSkia$taskNameSuffix") {
-            dependsOn(downloadSkia)
+//            dependsOn(downloadSkia)
             from(downloadSkia.map { zipTree(it) })
             into(skiko.dependenciesDir.resolve("skia/$skiaRelease"))
         }.map { it.destinationDir.absoluteFile }
